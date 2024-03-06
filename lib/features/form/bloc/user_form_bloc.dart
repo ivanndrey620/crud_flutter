@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:crud_flutter/data/repository/repository.dart';
 import 'package:crud_flutter/features/add_user.dart/domain/models/user.dart';
+import 'package:crud_flutter/features/add_user.dart/utils/user_state_enum.dart';
 import 'package:crud_flutter/features/form/bloc/form_ui_state.dart';
 
 part 'user_form_event.dart';
@@ -82,6 +83,9 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
       final dateOfBirth = state.dateOfBirth;
       final password = state.password;
 
+      final isActive =
+          event.userStateEnum == UserStateEnum.active ? true : false;
+
       emit(state.copyWith(uiState: const FormUiState.loading()));
 
       if (name.isEmpty ||
@@ -106,7 +110,7 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
         email: email,
         dateOfBirth: dateOfBirth,
         password: password,
-        isActive: false,
+        isActive: isActive,
       );
 
       repository.addUser(user);

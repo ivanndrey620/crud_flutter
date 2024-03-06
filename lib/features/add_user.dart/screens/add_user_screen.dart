@@ -1,3 +1,5 @@
+import 'package:crud_flutter/features/add_user.dart/cubit/user_state_cubit.dart';
+import 'package:crud_flutter/features/add_user.dart/utils/user_state_enum.dart';
 import 'package:crud_flutter/features/features.dart';
 import 'package:crud_flutter/features/form/bloc/user_form_bloc.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,15 @@ class AddUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => locator.get<UserFormBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => locator.get<UserFormBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => locator.get<UserStateCubit>(),
+        ),
+      ],
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocListener<UserFormBloc, UserFormState>(
@@ -47,14 +56,62 @@ class AddUserScreen extends StatelessWidget {
                   SizedBox(height: 16),
                   _PasswordField(),
                   SizedBox(height: 16),
-                  _AddButton(),
+                  _ActiveOrInactive(),
                   SizedBox(height: 16),
+                  _AddButton(),
                 ],
               );
             },
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ActiveOrInactive extends StatelessWidget {
+  const _ActiveOrInactive();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserStateCubit, UserStateEnum>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IntrinsicWidth(
+              child: RadioListTile(
+                visualDensity: const VisualDensity(
+                  horizontal: VisualDensity.minimumDensity,
+                  vertical: VisualDensity.minimumDensity,
+                ),
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                value: UserStateEnum.active,
+                groupValue: state,
+                onChanged: (value) =>
+                    context.read<UserStateCubit>().changeUserState(value!),
+                title: const Text('Activo'),
+              ),
+            ),
+            IntrinsicWidth(
+              child: RadioListTile(
+                visualDensity: const VisualDensity(
+                  horizontal: VisualDensity.minimumDensity,
+                  vertical: VisualDensity.minimumDensity,
+                ),
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                value: UserStateEnum.inactive,
+                groupValue: state,
+                onChanged: (value) =>
+                    context.read<UserStateCubit>().changeUserState(value!),
+                title: const Text('Inactivo'),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -66,7 +123,13 @@ class _AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () => context.read<UserFormBloc>().add(OnAddUserEvent()),
+        onPressed: () {
+          final userState = context.read<UserStateCubit>().state;
+
+          context
+              .read<UserFormBloc>()
+              .add(OnAddUserEvent(userStateEnum: userState));
+        },
         child: const Text('Guardar'),
       ),
     );

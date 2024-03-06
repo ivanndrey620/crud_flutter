@@ -44,4 +44,8 @@ final class OnAddUserPasswordEvent extends UserFormEvent {
   OnAddUserPasswordEvent({required this.password});
 }
 
-final class OnAddUserEvent extends UserFormEvent {}
+final class OnAddUserEvent extends UserFormEvent {
+  final UserStateEnum userStateEnum;
+
+  OnAddUserEvent({required this.userStateEnum});
+}
