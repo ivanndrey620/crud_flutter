@@ -1,11 +1,15 @@
 import 'package:bloc/bloc.dart';
+import 'package:crud_flutter/data/repository/repository.dart';
+import 'package:crud_flutter/features/add_user.dart/domain/models/user.dart';
 import 'package:crud_flutter/features/form/bloc/form_ui_state.dart';
 
 part 'user_form_event.dart';
 part 'user_form_state.dart';
 
 class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
-  UserFormBloc() : super(const UserFormState()) {
+  final Repository repository;
+
+  UserFormBloc({required this.repository}) : super(const UserFormState()) {
     on<OnAddUserNameEvent>(
       (event, emit) => emit(
         state.copyWith(
@@ -94,6 +98,18 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
 
         return;
       }
+      final user = User(
+        name: name,
+        lastname: lastname,
+        phone: phone,
+        address: address,
+        email: email,
+        dateOfBirth: dateOfBirth,
+        password: password,
+        isActive: false,
+      );
+
+      repository.addUser(user);
 
       emit(state.copyWith(uiState: const FormUiState.loaded()));
     });

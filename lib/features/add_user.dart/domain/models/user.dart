@@ -7,7 +7,7 @@ class User {
   final String name;
   final String lastname;
   final int phone;
-  final String addresss;
+  final String address;
   final String email;
   final String dateOfBirth;
   final String password;
@@ -17,7 +17,7 @@ class User {
     required this.name,
     required this.lastname,
     required this.phone,
-    required this.addresss,
+    required this.address,
     required this.email,
     required this.dateOfBirth,
     required this.password,

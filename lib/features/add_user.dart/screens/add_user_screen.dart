@@ -19,6 +19,7 @@ class AddUserScreen extends StatelessWidget {
               error: (message) => Fluttertoast.showToast(msg: message),
               loaded: () {
                 Navigator.pop(context);
+                Fluttertoast.showToast(msg: 'Agregado');
               },
             );
           },
