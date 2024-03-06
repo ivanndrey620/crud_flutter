@@ -1,23 +1,23 @@
 part of 'user_form_bloc.dart';
 
 class UserFormState {
-  final String name;
-  final String lastname;
-  final int phone;
-  final String address;
-  final String email;
-  final String dateOfBirth;
-  final String password;
+  final String? name;
+  final String? lastname;
+  final int? phone;
+  final String? address;
+  final String? email;
+  final String? dateOfBirth;
+  final String? password;
   final FormUiState uiState;
 
   const UserFormState({
-    this.name = '',
-    this.lastname = '',
-    this.phone = 0,
-    this.address = '',
-    this.email = '',
-    this.dateOfBirth = '',
-    this.password = '',
+    this.name,
+    this.lastname,
+    this.phone,
+    this.address,
+    this.email,
+    this.dateOfBirth,
+    this.password,
     FormUiState? uiState,
   }) : uiState = uiState ?? const FormUiState.initial();
 

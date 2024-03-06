@@ -1,4 +1,5 @@
 import 'package:crud_flutter/features/features.dart';
+import 'package:crud_flutter/features/form/widgets/custom_field_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class TitleFieldWidget extends StatelessWidget {
@@ -11,6 +12,7 @@ class TitleFieldWidget extends StatelessWidget {
     this.keyboardType = TextInputType.name,
     this.onChangedCallback,
     this.onSubmittedCallback,
+    this.onClickedCallback,
   });
 
   final String title;
@@ -20,13 +22,16 @@ class TitleFieldWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final Function(String content)? onChangedCallback;
   final Function(String content)? onSubmittedCallback;
+  final VoidCallback? onClickedCallback;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(child: _CustomFieldTitle(title: title)),
+        Expanded(
+          child: CustomFieldTitleWidget(title: title),
+        ),
         Expanded(
           flex: 2,
           child: CustomFieldWidget(
@@ -36,26 +41,10 @@ class TitleFieldWidget extends StatelessWidget {
             keyboardType: keyboardType,
             onChangedCallback: onChangedCallback,
             onSubmittedCallback: onSubmittedCallback,
+            onClickedCallback: onClickedCallback,
           ),
         ),
       ],
-    );
-  }
-}
-
-class _CustomFieldTitle extends StatelessWidget {
-  const _CustomFieldTitle({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 18,
-      ),
     );
   }
 }

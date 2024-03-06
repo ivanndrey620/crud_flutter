@@ -88,13 +88,13 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
 
       emit(state.copyWith(uiState: const FormUiState.loading()));
 
-      if (name.isEmpty ||
-          lastname.isEmpty ||
-          phone == 0 ||
-          address.isEmpty ||
-          email.isEmpty ||
-          dateOfBirth.isEmpty ||
-          password.isEmpty) {
+      if (name == null ||
+          lastname == null ||
+          phone == null ||
+          address == null ||
+          email == null ||
+          dateOfBirth == null ||
+          password == null) {
         emit(state.copyWith(
           uiState: const FormUiState.error(
               message: 'Debe completar todos los campos'),

@@ -2,6 +2,8 @@ import 'package:crud_flutter/features/add_user.dart/cubit/user_state_cubit.dart'
 import 'package:crud_flutter/features/add_user.dart/utils/user_state_enum.dart';
 import 'package:crud_flutter/features/features.dart';
 import 'package:crud_flutter/features/form/bloc/user_form_bloc.dart';
+import 'package:crud_flutter/features/form/widgets/custom_field_title_widget.dart';
+import 'package:crud_flutter/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -34,31 +36,31 @@ class AddUserScreen extends StatelessWidget {
           },
           child: BlocBuilder<UserFormBloc, UserFormState>(
             builder: (context, state) {
-              return const Column(
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 16),
-                  CustomTitleWidget(title: 'Agregar nuevo Usuario'),
-                  SizedBox(height: 32),
-                  _NameField(),
-                  SizedBox(height: 16),
-                  _LastnameField(),
-                  SizedBox(height: 16),
-                  _PhoneField(),
-                  SizedBox(height: 16),
-                  _AddressField(),
-                  SizedBox(height: 16),
-                  _EmailField(),
-                  SizedBox(height: 16),
-                  _DateOfBirthField(),
-                  SizedBox(height: 16),
-                  _PasswordField(),
-                  SizedBox(height: 16),
-                  _ActiveOrInactive(),
-                  SizedBox(height: 16),
-                  _AddButton(),
+                  const SizedBox(height: 16),
+                  const CustomTitleWidget(title: 'Agregar nuevo Usuario'),
+                  const SizedBox(height: 32),
+                  _NameField(initialValue: state.name),
+                  const SizedBox(height: 16),
+                  _LastnameField(initialValue: state.lastname),
+                  const SizedBox(height: 16),
+                  _PhoneField(initialValue: state.phone?.toString()),
+                  const SizedBox(height: 16),
+                  _AddressField(initialValue: state.address),
+                  const SizedBox(height: 16),
+                  _EmailField(initialValue: state.email),
+                  const SizedBox(height: 16),
+                  _DateOfBirthField(initialValue: state.dateOfBirth),
+                  const SizedBox(height: 16),
+                  _PasswordField(initialValue: state.password),
+                  const SizedBox(height: 16),
+                  const _ActiveOrInactive(),
+                  const SizedBox(height: 16),
+                  const _AddButton(),
                 ],
               );
             },
@@ -137,11 +139,14 @@ class _AddButton extends StatelessWidget {
 }
 
 class _PasswordField extends StatelessWidget {
-  const _PasswordField();
+  const _PasswordField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+      initialValue: initialValue,
       title: 'Contraseña:',
       keyboardType: TextInputType.visiblePassword,
       onChangedCallback: (password) => context
@@ -155,29 +160,66 @@ class _PasswordField extends StatelessWidget {
 }
 
 class _DateOfBirthField extends StatelessWidget {
-  const _DateOfBirthField();
+  const _DateOfBirthField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
-    return TitleFieldWidget(
-      title: 'Fecha de Nacimiento:',
-      hintText: '[dd/mm/yy]',
-      onChangedCallback: (dateOfBirth) => context
-          .read<UserFormBloc>()
-          .add(OnAddUserDateOfBirthEvent(dateOfBirth: dateOfBirth)),
-      onSubmittedCallback: (dateOfBirth) => context
-          .read<UserFormBloc>()
-          .add(OnAddUserDateOfBirthEvent(dateOfBirth: dateOfBirth)),
+    return GestureDetector(
+      onTap: () async {
+        final selectedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime.now(),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
+        );
+
+        if (selectedDate == null) return;
+
+        final dateOfBirth = selectedDate.prettyDate();
+
+        if (context.mounted) {
+          context
+              .read<UserFormBloc>()
+              .add(OnAddUserDateOfBirthEvent(dateOfBirth: dateOfBirth));
+        }
+      },
+      child: Row(
+        children: [
+          const Expanded(
+            child: CustomFieldTitleWidget(title: 'Fecha de Nacimiento'),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(12),
+                ),
+              ),
+              child: Text(initialValue ?? 'dd/mm/yy'),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
 
 class _EmailField extends StatelessWidget {
-  const _EmailField();
+  const _EmailField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+      initialValue: initialValue,
       title: 'Correo:',
       keyboardType: TextInputType.emailAddress,
       onChangedCallback: (email) =>
@@ -189,11 +231,14 @@ class _EmailField extends StatelessWidget {
 }
 
 class _AddressField extends StatelessWidget {
-  const _AddressField();
+  const _AddressField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+      initialValue: initialValue,
       title: 'Dirección:',
       keyboardType: TextInputType.streetAddress,
       onChangedCallback: (address) => context
@@ -207,11 +252,14 @@ class _AddressField extends StatelessWidget {
 }
 
 class _PhoneField extends StatelessWidget {
-  const _PhoneField();
+  const _PhoneField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+      initialValue: initialValue,
       title: 'Teléfono:',
       keyboardType: TextInputType.phone,
       onChangedCallback: (phone) =>
@@ -223,11 +271,14 @@ class _PhoneField extends StatelessWidget {
 }
 
 class _LastnameField extends StatelessWidget {
-  const _LastnameField();
+  const _LastnameField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+      initialValue: initialValue,
       title: 'Apellido:',
       onChangedCallback: (lastname) => context
           .read<UserFormBloc>()
@@ -240,11 +291,14 @@ class _LastnameField extends StatelessWidget {
 }
 
 class _NameField extends StatelessWidget {
-  const _NameField();
+  const _NameField({this.initialValue});
+
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+        initialValue: initialValue,
         title: 'Nombre:',
         onChangedCallback: (name) =>
             context.read<UserFormBloc>().add(OnAddUserNameEvent(name: name)),

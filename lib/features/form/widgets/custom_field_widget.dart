@@ -10,6 +10,7 @@ class CustomFieldWidget extends HookWidget {
     this.keyboardType = TextInputType.name,
     this.onChangedCallback,
     this.onSubmittedCallback,
+    this.onClickedCallback,
   });
 
   final String? initialValue;
@@ -18,12 +19,15 @@ class CustomFieldWidget extends HookWidget {
   final TextInputType? keyboardType;
   final Function(String content)? onChangedCallback;
   final Function(String content)? onSubmittedCallback;
+  final VoidCallback? onClickedCallback;
 
   @override
   Widget build(BuildContext context) {
     final controller = useTextEditingController(text: initialValue);
 
     return TextField(
+      onTap: () => onClickedCallback?.call(),
+      readOnly: onClickedCallback != null,
       controller: controller,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 10),
