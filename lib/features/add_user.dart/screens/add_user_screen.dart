@@ -40,7 +40,7 @@ class AddUserScreen extends StatelessWidget {
           child: BlocBuilder<UserFormBloc, UserFormState>(
             builder: (context, state) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
