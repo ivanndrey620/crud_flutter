@@ -3,6 +3,7 @@ import 'package:crud_flutter/features/add_user.dart/utils/user_state_enum.dart';
 import 'package:crud_flutter/features/features.dart';
 import 'package:crud_flutter/features/form/bloc/user_form_bloc.dart';
 import 'package:crud_flutter/features/form/widgets/custom_field_title_widget.dart';
+import 'package:crud_flutter/utils/contants.dart';
 import 'package:crud_flutter/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,7 +46,7 @@ class AddUserScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 16),
-                  const CustomTitleWidget(title: 'Agregar nuevo Usuario'),
+                  const CustomTitleWidget(title: Constants.addUser),
                   const SizedBox(height: 32),
                   _NameField(initialValue: state.name),
                   const SizedBox(height: 16),
@@ -96,7 +97,7 @@ class _ActiveOrInactive extends StatelessWidget {
                 groupValue: state,
                 onChanged: (value) =>
                     context.read<UserStateCubit>().changeUserState(value!),
-                title: const Text('Activo'),
+                title: const Text(Constants.active),
               ),
             ),
             IntrinsicWidth(
@@ -111,7 +112,7 @@ class _ActiveOrInactive extends StatelessWidget {
                 groupValue: state,
                 onChanged: (value) =>
                     context.read<UserStateCubit>().changeUserState(value!),
-                title: const Text('Inactivo'),
+                title: const Text(Constants.inactive),
               ),
             ),
           ],
@@ -142,7 +143,7 @@ class _AddOrEditButton extends StatelessWidget {
               .read<UserFormBloc>()
               .add(OnAddUserEvent(userStateEnum: userState));
         },
-        child: isEdit ? const Text('Editar') : const Text('Guardar'),
+        child: isEdit ? const Text(Constants.edit) : const Text(Constants.save),
       ),
     );
   }
@@ -157,7 +158,7 @@ class _PasswordField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleFieldWidget(
       initialValue: initialValue,
-      title: 'Contraseña:',
+      title: Constants.password,
       keyboardType: TextInputType.visiblePassword,
       onChangedCallback: (password) => context
           .read<UserFormBloc>()
@@ -198,7 +199,7 @@ class _DateOfBirthField extends StatelessWidget {
       child: Row(
         children: [
           const Expanded(
-            child: CustomFieldTitleWidget(title: 'Fecha de Nacimiento'),
+            child: CustomFieldTitleWidget(title: Constants.dateOfBirth),
           ),
           Expanded(
             flex: 2,
@@ -213,7 +214,7 @@ class _DateOfBirthField extends StatelessWidget {
                   Radius.circular(12),
                 ),
               ),
-              child: Text(initialValue ?? 'dd/mm/yy'),
+              child: Text(initialValue ?? Constants.dateOfBirthHint),
             ),
           )
         ],
@@ -231,7 +232,7 @@ class _EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleFieldWidget(
       initialValue: initialValue,
-      title: 'Correo:',
+      title: Constants.email,
       keyboardType: TextInputType.emailAddress,
       onChangedCallback: (email) =>
           context.read<UserFormBloc>().add(OnAddUserEmailEvent(email: email)),
@@ -250,7 +251,7 @@ class _AddressField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleFieldWidget(
       initialValue: initialValue,
-      title: 'Dirección:',
+      title: Constants.address,
       keyboardType: TextInputType.streetAddress,
       onChangedCallback: (address) => context
           .read<UserFormBloc>()
@@ -271,7 +272,7 @@ class _PhoneField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleFieldWidget(
       initialValue: initialValue,
-      title: 'Teléfono:',
+      title: Constants.phone,
       keyboardType: TextInputType.phone,
       onChangedCallback: (phone) =>
           context.read<UserFormBloc>().add(OnAddUserPhoneEvent(phone: phone)),
@@ -290,7 +291,7 @@ class _LastnameField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleFieldWidget(
       initialValue: initialValue,
-      title: 'Apellido:',
+      title: Constants.lastname,
       onChangedCallback: (lastname) => context
           .read<UserFormBloc>()
           .add(OnAddUserLastNameEvent(lastname: lastname)),
@@ -310,7 +311,7 @@ class _NameField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleFieldWidget(
         initialValue: initialValue,
-        title: 'Nombre:',
+        title: Constants.name,
         onChangedCallback: (name) =>
             context.read<UserFormBloc>().add(OnAddUserNameEvent(name: name)),
         onSubmittedCallback: (name) =>

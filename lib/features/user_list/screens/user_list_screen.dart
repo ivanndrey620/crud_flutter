@@ -1,6 +1,7 @@
 import 'package:crud_flutter/features/features.dart';
 import 'package:crud_flutter/features/user_list/bloc/user_list_bloc.dart';
 import 'package:crud_flutter/features/user_list/widgets/slidable_user_item.dart';
+import 'package:crud_flutter/utils/contants.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class UserListScreen extends StatelessWidget {
           title: const Padding(
             padding: EdgeInsets.all(32.0),
             child: Text(
-              'Listado de Usuarios',
+              Constants.userList,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -45,7 +46,7 @@ class UserListScreen extends StatelessWidget {
                   return SlidableUserItem(user: userWithId);
                 },
                 emptyBuilder: (context) => const Center(
-                  child: Text('No hay usuarios agregadas'),
+                  child: Text(Constants.noUsersFound),
                 ),
               ),
               error: (error) => Center(

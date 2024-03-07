@@ -1,6 +1,7 @@
 import 'package:crud_flutter/features/features.dart';
 import 'package:crud_flutter/features/user_list/bloc/user_list_bloc.dart';
 import 'package:crud_flutter/features/user_list/widgets/user_item.dart';
+import 'package:crud_flutter/utils/contants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -24,7 +25,7 @@ class SlidableUserItem extends StatelessWidget {
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
+            label: Constants.delete,
             borderRadius: BorderRadius.circular(10),
             spacing: 0,
           ),
@@ -44,7 +45,7 @@ class SlidableUserItem extends StatelessWidget {
             backgroundColor: const Color(0xFF7BC043),
             foregroundColor: Colors.white,
             icon: Icons.edit,
-            label: 'Edit',
+            label: Constants.edit,
             borderRadius: BorderRadius.circular(10),
             spacing: 0,
           ),
