@@ -1,13 +1,15 @@
-import 'package:crud_flutter/features/features.dart';
+import 'package:crud_flutter/app/navigation/app_router.dart';
 import 'package:flutter/material.dart';
 
 class CrudApp extends StatelessWidget {
-  const CrudApp({super.key});
+  CrudApp({super.key});
+
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return MaterialApp.router(
+      routerConfig: _appRouter.config(),
     );
   }
 }

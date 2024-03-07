@@ -12,5 +12,5 @@ void main() async {
 
   initDI();
 
-  runApp(const CrudApp());
+  runApp(CrudApp());
 }

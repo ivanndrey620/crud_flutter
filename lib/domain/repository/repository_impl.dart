@@ -5,21 +5,18 @@ import 'package:crud_flutter/features/add_user.dart/domain/models/user.dart';
 class RepositoryImpl extends Repository {
   static const String collectionPath = 'crud_app';
 
-  final FirebaseFirestore firebaseFirestore;
+  final FirebaseFirestore db;
 
-  RepositoryImpl({required this.firebaseFirestore});
+  RepositoryImpl({required this.db});
 
   @override
   void addUser(User user) {
-    firebaseFirestore.collection(collectionPath).add(user.toJson());
+    db.collection(collectionPath).add(user.toJson());
   }
 
   @override
   void editUser(User user) {
-    firebaseFirestore
-        .collection(collectionPath)
-        .doc(user.id)
-        .set(user.toJson());
+    db.collection(collectionPath).doc(user.id).set(user.toJson());
   }
 
   @override
@@ -27,14 +24,37 @@ class RepositoryImpl extends Repository {
 
   @override
   void deleteUser(String id) {
-    firebaseFirestore.collection(collectionPath).doc(id).delete();
+    db.collection(collectionPath).doc(id).delete();
   }
 
   @override
   CollectionReference<User> getUsers() {
-    return firebaseFirestore.collection(collectionPath).withConverter(
+    return db.collection(collectionPath).withConverter(
           fromFirestore: (snapshot, _) => User.fromJson(snapshot.data()!),
           toFirestore: (taskModel, _) => taskModel.toJson(),
         );
+  }
+
+  @override
+  DocumentReference<User> getUserById(String id) {
+    return db.collection(collectionPath).doc(id).withConverter(
+          fromFirestore: (snapshot, _) => User.fromJson(snapshot.data()!),
+          toFirestore: (taskModel, _) => taskModel.toJson(),
+        );
+  }
+
+  @override
+  Future<User> getUserByIdNew(String id) async {
+    try {
+      final doc = await db.collection(collectionPath).doc(id).get();
+
+      final data = doc.data();
+
+      final user = User.fromJson(data!);
+
+      return user;
+    } catch (e) {
+      throw ('Error is $e');
+    }
   }
 }

@@ -11,4 +11,8 @@ abstract class Repository {
   void deleteUser(String id);
 
   CollectionReference<User> getUsers();
+
+  DocumentReference<User> getUserById(String id);
+
+  Future<User> getUserByIdNew(String id);
 }
