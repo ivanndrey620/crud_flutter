@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CustomFieldWidget extends HookWidget {
@@ -11,6 +12,7 @@ class CustomFieldWidget extends HookWidget {
     this.onChangedCallback,
     this.onSubmittedCallback,
     this.onClickedCallback,
+    this.maxLength,
   });
 
   final String? initialValue;
@@ -20,6 +22,7 @@ class CustomFieldWidget extends HookWidget {
   final Function(String content)? onChangedCallback;
   final Function(String content)? onSubmittedCallback;
   final VoidCallback? onClickedCallback;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +31,12 @@ class CustomFieldWidget extends HookWidget {
     controller.text = initialValue ?? '';
 
     return TextField(
+      maxLength: maxLength,
       onTap: () => onClickedCallback?.call(),
       readOnly: onClickedCallback != null,
       controller: controller,
       decoration: InputDecoration(
+        counterText: '',
         contentPadding: const EdgeInsets.only(left: 10),
         hintText: hintText,
         border: OutlineInputBorder(

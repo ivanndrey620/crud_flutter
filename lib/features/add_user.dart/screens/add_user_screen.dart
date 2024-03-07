@@ -271,6 +271,7 @@ class _PhoneField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TitleFieldWidget(
+      maxLength: 8,
       initialValue: initialValue,
       title: Constants.phone,
       keyboardType: TextInputType.phone,

@@ -3,6 +3,7 @@ import 'package:crud_flutter/data/repository/repository.dart';
 import 'package:crud_flutter/features/add_user.dart/domain/models/user.dart';
 import 'package:crud_flutter/features/add_user.dart/utils/user_state_enum.dart';
 import 'package:crud_flutter/features/form/bloc/form_ui_state.dart';
+import 'package:crud_flutter/utils/contants.dart';
 
 part 'user_form_event.dart';
 part 'user_form_state.dart';
@@ -148,7 +149,8 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
           address == null ||
           email == null ||
           dateOfBirth == null ||
-          password == null) {
+          password == null ||
+          event.userStateEnum == UserStateEnum.non) {
         emit(state.copyWith(
           uiState: const FormUiState.error(
               message: 'Debe completar todos los campos'),
@@ -156,6 +158,22 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
 
         return;
       }
+
+      if (phone.toString().length != 8) {
+        emit(state.copyWith(
+          uiState: const FormUiState.error(
+              message: 'El telefono debe contener 8 digitos'),
+        ));
+        return;
+      }
+
+      if (!RegExp(Constants.pattern).hasMatch(email)) {
+        emit(state.copyWith(
+          uiState: const FormUiState.error(message: 'El correo no es valido'),
+        ));
+        return;
+      }
+
       final user = User(
         name: name,
         lastname: lastname,

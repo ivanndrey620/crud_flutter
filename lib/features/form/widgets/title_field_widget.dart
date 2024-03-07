@@ -13,6 +13,7 @@ class TitleFieldWidget extends StatelessWidget {
     this.onChangedCallback,
     this.onSubmittedCallback,
     this.onClickedCallback,
+    this.maxLength,
   });
 
   final String title;
@@ -23,6 +24,7 @@ class TitleFieldWidget extends StatelessWidget {
   final Function(String content)? onChangedCallback;
   final Function(String content)? onSubmittedCallback;
   final VoidCallback? onClickedCallback;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class TitleFieldWidget extends StatelessWidget {
         Expanded(
           flex: 2,
           child: CustomFieldWidget(
+            maxLength: maxLength,
             initialValue: initialValue,
             hintText: hintText,
             maxLines: maxLines,
