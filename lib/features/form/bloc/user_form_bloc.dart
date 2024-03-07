@@ -10,7 +10,30 @@ part 'user_form_state.dart';
 class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
   final Repository repository;
 
+  late User? user;
+
   UserFormBloc({required this.repository}) : super(const UserFormState()) {
+    on<OnInitUserEvent>((event, emit) {
+      final user = event.user;
+
+      if (user == null) return;
+
+      final isActive =
+          user.isActive ? UserStateEnum.active : UserStateEnum.inactive;
+
+      emit(state.copyWith(
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        phone: user.phone,
+        address: user.address,
+        email: user.email,
+        dateOfBirth: user.dateOfBirth,
+        password: user.password,
+        isActive: isActive,
+      ));
+    });
+
     on<OnAddUserNameEvent>(
       (event, emit) => emit(
         state.copyWith(
@@ -74,6 +97,37 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
       ),
     );
 
+    on<OnEditUserEvent>((event, emit) {
+      final id = state.id;
+      final name = state.name;
+      final lastname = state.lastname;
+      final phone = state.phone;
+      final address = state.address;
+      final email = state.email;
+      final dateOfBirth = state.dateOfBirth;
+      final password = state.password;
+      final isActive = state.isActive == UserStateEnum.active ? true : false;
+
+      emit(state.copyWith(uiState: const FormUiState.loading()));
+
+      final user = User(
+        id: id!,
+        name: name!,
+        lastname: lastname!,
+        phone: phone!,
+        address: address!,
+        email: email!,
+        dateOfBirth: dateOfBirth!,
+        password: password!,
+        isActive: isActive,
+      );
+
+      repository.editUser(user);
+
+      emit(state.copyWith(
+          uiState: const FormUiState.loaded(message: 'Editado')));
+    });
+
     on<OnAddUserEvent>((event, emit) {
       final name = state.name;
       final lastname = state.lastname;
@@ -115,7 +169,8 @@ class UserFormBloc extends Bloc<UserFormEvent, UserFormState> {
 
       repository.addUser(user);
 
-      emit(state.copyWith(uiState: const FormUiState.loaded()));
+      emit(state.copyWith(
+          uiState: const FormUiState.loaded(message: 'Agregado')));
     });
   }
 }

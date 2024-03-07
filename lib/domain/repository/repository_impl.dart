@@ -15,8 +15,26 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  void editUser(User user) {}
+  void editUser(User user) {
+    firebaseFirestore
+        .collection(collectionPath)
+        .doc(user.id)
+        .set(user.toJson());
+  }
 
   @override
   void removeUser(User user) {}
+
+  @override
+  void deleteUser(String id) {
+    firebaseFirestore.collection(collectionPath).doc(id).delete();
+  }
+
+  @override
+  CollectionReference<User> getUsers() {
+    return firebaseFirestore.collection(collectionPath).withConverter(
+          fromFirestore: (snapshot, _) => User.fromJson(snapshot.data()!),
+          toFirestore: (taskModel, _) => taskModel.toJson(),
+        );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_flutter/features/features.dart';
 
 abstract class Repository {
@@ -6,4 +7,8 @@ abstract class Repository {
   void editUser(User user);
 
   void removeUser(User user);
+
+  void deleteUser(String id);
+
+  CollectionReference<User> getUsers();
 }

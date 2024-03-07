@@ -49,3 +49,11 @@ final class OnAddUserEvent extends UserFormEvent {
 
   OnAddUserEvent({required this.userStateEnum});
 }
+
+final class OnInitUserEvent extends UserFormEvent {
+  final User? user;
+
+  OnInitUserEvent({required this.user});
+}
+
+final class OnEditUserEvent extends UserFormEvent {}

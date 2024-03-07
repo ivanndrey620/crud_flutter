@@ -9,17 +9,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AddUserScreen extends StatelessWidget {
-  const AddUserScreen({super.key});
+  const AddUserScreen({super.key, this.user});
+
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => locator.get<UserFormBloc>(),
+          create: (context) =>
+              locator.get<UserFormBloc>()..add(OnInitUserEvent(user: user)),
         ),
         BlocProvider(
-          create: (context) => locator.get<UserStateCubit>(),
+          create: (context) => locator.get<UserStateCubit>()..init(user),
         ),
       ],
       child: Padding(
@@ -28,9 +31,9 @@ class AddUserScreen extends StatelessWidget {
           listener: (context, state) {
             state.uiState.whenOrNull(
               error: (message) => Fluttertoast.showToast(msg: message),
-              loaded: () {
+              loaded: (message) {
                 Navigator.pop(context);
-                Fluttertoast.showToast(msg: 'Agregado');
+                Fluttertoast.showToast(msg: message);
               },
             );
           },
@@ -60,7 +63,7 @@ class AddUserScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   const _ActiveOrInactive(),
                   const SizedBox(height: 16),
-                  const _AddButton(),
+                  _AddOrEditButton(isEdit: user != null),
                 ],
               );
             },
@@ -118,21 +121,28 @@ class _ActiveOrInactive extends StatelessWidget {
   }
 }
 
-class _AddButton extends StatelessWidget {
-  const _AddButton();
+class _AddOrEditButton extends StatelessWidget {
+  const _AddOrEditButton({required this.isEdit});
+
+  final bool isEdit;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
         onPressed: () {
+          if (isEdit) {
+            context.read<UserFormBloc>().add(OnEditUserEvent());
+            return;
+          }
+
           final userState = context.read<UserStateCubit>().state;
 
           context
               .read<UserFormBloc>()
               .add(OnAddUserEvent(userStateEnum: userState));
         },
-        child: const Text('Guardar'),
+        child: isEdit ? const Text('Editar') : const Text('Guardar'),
       ),
     );
   }
@@ -196,6 +206,7 @@ class _DateOfBirthField extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 border: Border.all(
+                  color: Colors.grey,
                   width: 1,
                 ),
                 borderRadius: const BorderRadius.all(

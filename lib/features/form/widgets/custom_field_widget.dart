@@ -23,7 +23,9 @@ class CustomFieldWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useTextEditingController(text: initialValue);
+    final controller = useTextEditingController();
+
+    controller.text = initialValue ?? '';
 
     return TextField(
       onTap: () => onClickedCallback?.call(),

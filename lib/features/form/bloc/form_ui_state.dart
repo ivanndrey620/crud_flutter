@@ -8,7 +8,7 @@ class FormUiState with _$FormUiState {
 
   const factory FormUiState.loading() = _Loading;
 
-  const factory FormUiState.loaded() = _Loaded;
+  const factory FormUiState.loaded({required String message}) = _Loaded;
 
   const factory FormUiState.error({required String message}) = _Error;
 }
