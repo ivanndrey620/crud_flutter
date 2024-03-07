@@ -45,7 +45,7 @@ class UserListScreen extends StatelessWidget {
                   return SlidableUserItem(user: userWithId);
                 },
                 emptyBuilder: (context) => const Center(
-                  child: Text('No hay tareas agregadas'),
+                  child: Text('No hay usuarios agregadas'),
                 ),
               ),
               error: (error) => Center(
